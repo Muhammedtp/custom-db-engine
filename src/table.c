@@ -5,6 +5,10 @@
 
 Table *new_table() {
     Table *table = (Table *)malloc(sizeof(Table));
+    if (table == NULL) {
+        fprintf(stderr, "Error: Unable to allocate memory for table.\n");
+        exit(EXIT_FAILURE);
+    }
     table->num_rows = 0;
     return table;
 }
@@ -14,10 +18,6 @@ void free_table(Table *table) {
 }
 
 void insert_row(Table *table, Row row) {
-    if (table->num_rows >= TABLE_MAX_ROWS) {
-        printf("Error: Table full.\n");
-        return;
-    }
     table->rows[table->num_rows++] = row;
 }
 

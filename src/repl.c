@@ -46,7 +46,21 @@ void start_repl() {
                 printf("Unknown command: %s\n", input);
         }
 
-        execute_command(table,cmd,input);
+        CommandResult result = execute_command(table, cmd, input);
+        switch (result) {
+            case CMD_SUCCESS:
+                // Success messages handled in execute_command
+                break;
+            case CMD_SYNTAX_ERROR:
+                printf("Error: Invalid syntax. Use: insert <id> <username> <email>\n");
+                break;
+            case CMD_TABLE_FULL:
+                printf("Error: Table is full. Cannot insert more rows.\n");
+                break;
+            case CMD_UNRECOGNIZED:
+                printf("Error: Unrecognized command '%s'.\n", input);
+                break;
+        }
     }
 
     free_table(table);

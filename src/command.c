@@ -14,19 +14,28 @@ CommandType parse_command(const char *input) {
     }
 }
 
-void execute_command(Table *table, CommandType cmd, const char *input) {
+CommandResult execute_command(Table *table, CommandType cmd, const char *input) {
     if (cmd == CMD_INSERT) {
         Row row;
         int args = sscanf(input, "insert %d %31s %254s", &row.id, row.username, row.email);
+        
+        // Validate the input format
         if (args < 3) {
-            printf("Error: Invalid INSERT syntax. Use: insert <id> <username> <email>\n");
-            return;
+            return CMD_SYNTAX_ERROR;
         }
+
+        // Check if the table is full
+        if (table->num_rows >= TABLE_MAX_ROWS) {
+            return CMD_TABLE_FULL;
+        }
+
+        // Insert the row
         insert_row(table, row);
-        printf("Row inserted.\n");
+        return CMD_SUCCESS;
     } else if (cmd == CMD_SELECT) {
         print_rows(table);
+        return CMD_SUCCESS;
     } else {
-        printf("Unknown command: %s\n", input);
+        return CMD_UNRECOGNIZED;
     }
 }
