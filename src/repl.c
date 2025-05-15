@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <command.h>
 #include "repl.h"
 
 #define MAX_INPUT_SIZE 1024
@@ -24,13 +25,23 @@ void start_repl() {
         // Remove trailing newline
         input[strcspn(input, "\n")] = '\0';
 
-        // Check for exit command
-        if (strcmp(input, "exit") == 0) {
-            printf("Goodbye!\n");
-            break;
-        }
-
+    
         // Echo the command (for now)
-        printf("You entered: %s\n", input);
+        //printf("You entered: %s\n", input);
+
+        CommandType cmd = parse_command(input);
+        switch (cmd) {
+            case CMD_EXIT:
+                printf("Goodbye!\n");
+                return;
+            case CMD_SELECT:
+                printf("Executing SELECT command...\n");
+                break;
+            case CMD_INSERT:
+                printf("Executing INSERT command...\n");
+                break;
+            default:
+                printf("Unknown command: %s\n", input);
+        }
     }
 }
