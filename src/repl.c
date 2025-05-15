@@ -1,13 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <command.h>
+#include "command.h"
 #include "repl.h"
+#include "table.h"
 
 #define MAX_INPUT_SIZE 1024
 
 void start_repl() {
     char input[MAX_INPUT_SIZE];
+    Table *table = new_table();
 
     printf("Welcome to the Custom Database Engine! Type 'exit' to quit.\n");
 
@@ -43,5 +45,9 @@ void start_repl() {
             default:
                 printf("Unknown command: %s\n", input);
         }
+
+        execute_command(table,cmd,input);
     }
+
+    free_table(table);
 }
